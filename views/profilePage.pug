@@ -1,0 +1,72 @@
+extends layouts/main-layout.pug
+//- main layout with navigation 
+
+block content
+    //- handling if  profile not existing 
+    if !profileUser
+        span.errorMessage Check the url you are trying to access
+    else  
+        //- to have an access from main layput to the posts 
+        script.
+            //- 'in bactics' cuz id needs to be a string
+            let profileUserId = '!{profileUser._id}';
+            let selectedTab = '!{selectedTab}';
+        //-  here we are using pug variable not JS
+
+        //- js countinf all followers
+        - followersCount = profileUser.followers.length
+        - followingCount = profileUser.following.length
+
+        .profileHeaderContainer
+            .coverPhotoContainer
+            .userImageContainer
+                img(src=profileUser.profilePic, class="profileIMG", alt="User profile image")
+            
+            .profileButtonsContainer
+                if profileUser._id != userLoggedIn._id
+                    a.profileButton(href=`/messages/${profileUser._id}`)
+                        i.fas.fa-envelope
+
+                    //- be suring taht it actually following , is profile Id exesists in array,.
+                    //- since its part of html(pug code)
+                    //-    -  dash gives an js code 
+                    - let profileUserId = profileUser._id.toString();
+                    - if(userLoggedIn.following && userLoggedIn.following.includes(profileUserId))
+                        +createFollowButton(profileUser, true)
+                        //- to pass correct following status array 
+                        //-  plus sign we add when we calling mixin
+                    - else
+                        +createFollowButton(profileUser, false)
+            //- displaying info about user
+            .userDetailsContainer
+                span.displayName #{profileUser.firstName} #{profileUser.lastName}
+                span.username @#{profileUser.username}
+                span.description #{profileUser.description}
+
+                .followersContainer
+                    //- linked with  the followersCount and followingCount  
+
+  
+                    a(href=`/profile/${profileUser.username}/following`)
+                        span.value #{followingCount}
+                        span Following
+                    a(href=`/profile/${profileUser.username}/followers`)
+                        span#followersValue.value #{followersCount}
+                        span Followers
+
+                    //- - if (user.role === 'ADMIN')
+
+
+        //- here we calling function 'mixin createTab' with posts & replies
+        .tabsContainer
+            +createTab("News", `/profile/${profileUser.username}`, selectedTab != "replies")
+            +createTab("Messages", `/profile/${profileUser.username}/replies`, selectedTab == "replies")
+            +createTab("Appointment", `/profile/${profileUser.username}/appointments`, selectedTab == "appointments")
+
+        //- posts Container for showing post of exact user on his profile Page
+        .postsContainer
+
+        +createPostModals(userLoggedIn)
+
+block scripts
+    script(src="/js/profile.js")

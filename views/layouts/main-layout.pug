@@ -1,0 +1,60 @@
+include ../mixins/mixins 
+//- mixins is such a short cut that is included in main layput , because we use home.pug where used mixins we declare it here also
+<!DOCTYPE html>
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{pageTitle}
+        link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css', integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh', crossorigin='anonymous')
+        link(rel='stylesheet' href="/css/main.css")
+        link(href="/css/icon")
+        
+
+    body
+        script. 
+            //- we said take payload value and inject it in the page
+            let userLoggedIn = !{userLoggedInJs}; 
+        .wrapper
+            .row
+                nav.col-2
+                    a(href="/")
+                        img(src='/css/icon/cross.png', alt='', width='35', height='auto' class="crossLogo")
+                    a(href="/")
+                        img.nav(src='/css/icon/home.png', alt='', width='30', height='auto')
+                    a(href="/search")
+                        img.nav(src='/css/icon/search.png', alt='', width='30', height='auto')
+                    a(href="/notifications")
+                        img.nav(src='/css/icon/pills.png', alt='', width='35', height='auto')
+
+                    
+                    a(href="/messages")
+                        img.nav(src='/css/icon/message.png', alt='', width='38', height='auto' , id='messages')
+                    a(href="/profile")
+
+
+                        img.nav(src='/css/icon/profilePic.png', alt='', width='27', height='auto')
+                    a(href="/logout")
+                        img.nav(src='/css/icon/exit.png', alt='', width='25', height='23')
+                .mainSectionContainer.col-10.col-md-8.col-lg-6
+                    .titleContainer 
+                        h1 #{pageTitle}
+                    block content
+
+
+                .d-none.d-md-block.col-md-2.col-lg-4
+
+        script(src='https://code.jquery.com/jquery-3.5.1.min.js', integrity='sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=', crossorigin='anonymous')
+        script(src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js', integrity='sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo', crossorigin='anonymous')
+        script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js', integrity='sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6', crossorigin='anonymous')
+
+        
+        script(src='https://kit.fontawesome.com/85404227e2.js' crossorigin='anonymous')
+        script(src='https://code.jquery.com/jquery-3.5.1.min.js', integrity='sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=', crossorigin='anonymous')
+        script(src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js', integrity='sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo', crossorigin='anonymous')
+        script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js', integrity='sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6', crossorigin='anonymous')
+
+        //- containing block of scripts ion 'home.pug' with scripts mostly related to main page
+        block scripts 
+        script(src="/js/common.js")
+

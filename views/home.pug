@@ -1,0 +1,22 @@
+
+extends layouts/main-layout.pug
+
+//- mixins is such a short cut that is included in main layout , because we use home.pug where used mixins we declare it here and also /in main-layout.pug 
+block content    
+    +createPostForm(userLoggedIn)
+    .postsContainer
+
+    +createPostModals(userLoggedIn)
+//-     connected with 'main-layouts.pug' & 'home.js' block scripts 
+//- that is proceed cripts in a block  -//
+
+   
+
+
+
+block scripts
+    script(src="/js/home.js")
+
+
+
+
