@@ -36,8 +36,11 @@ function createUserHtml(userData, showFollowButton) {
 
     let name = userData.firstName + " " + userData.lastName;
     let isFollowing = userLoggedIn.following && userLoggedIn.following.includes(userData._id);
-    let text = isFollowing ? "Following" : "Follow"
-    let buttonClass = isFollowing ? "followButton following" : "followButton"
+
+
+
+    let text = isFollowing ? "" : "" 
+    let buttonClass = isFollowing ? "followButton fas fa-star yes" : "followButton fas fa-star no"
 
     let followButton = "";
     if (showFollowButton && userLoggedIn._id != userData._id) {
@@ -48,7 +51,8 @@ function createUserHtml(userData, showFollowButton) {
 
     return `<div class='user'>
                 <div class='userImageContainer'>
-                    <img src='${userData.profilePic}'>
+                <img src='${userData.profilePic}'>
+                    
                 </div>
                 <div class='userDetailsContainer'>
                     <div class='header'>

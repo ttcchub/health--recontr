@@ -11,6 +11,7 @@ const UserSchema = new Schema({
     email: { type: String, required: true, trim: true, unique: true },
     password: { type: String, required: true },
     profilePic: { type: String, default: "../css/icon/profilePic.png"},
+    coverPhoto: { type: String },
     likes:[{type: Schema.Types.ObjectId, ref: 'Post'}],
     retweets:[{type: Schema.Types.ObjectId, ref: 'Post'}],
     following: [{ type: Schema.Types.ObjectId, ref: 'User' }],

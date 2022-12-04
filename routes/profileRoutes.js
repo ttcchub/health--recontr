@@ -7,7 +7,7 @@ const User = require('../schemas/UserSchema');
 
 router.get("/", (req, res, next) => {
 
-    let payload = {
+    var payload = {
         pageTitle: req.session.user.username,
         userLoggedIn: req.session.user,
         userLoggedInJs: JSON.stringify(req.session.user),
@@ -22,8 +22,11 @@ router.get("/:username", async (req, res, next) => {
     // because function is asynchronize we need to wait for this call
     let payload = await getPayload(req.params.username, req.session.user);
     
+
     res.status(200).render("profilePage", payload);
 })
+
+
 
 router.get("/:username/replies", async (req, res, next) => {
 
@@ -37,13 +40,15 @@ router.get("/:username/replies", async (req, res, next) => {
 // handling followers and following page 
 // loading just a payload with user session name / follwoing  data and samer with followers
 // (1)
-router.get("/:username/following", async (req, res1, next) => {
+router.get("/:username/following", async (req, res, next) => {
 
     let payload = await getPayload(req.params.username, req.session.user);
     payload.selectedTab = "following";
     
     res.status(200).render("followersAndFollowing", payload);
 })
+
+
 // (2)
 router.get("/:username/followers", async (req, res, next) => {
 

@@ -1,0 +1,34 @@
+extends layouts/main-layout.pug
+
+
+block content   
+    
+    if errorMessage
+        span.errorMessage #{errorMessage}
+    else 
+        script.
+            var chatId = '!{chat._id}';
+
+        .chatPageContainer
+            .chatTitleBarContainer
+                +createChatImage(chat, userLoggedIn)
+                //-  data-togal - oppening modal , data-targer - how we open modal
+                span#chatName(data-toggle="modal", data-target="#chatNameModal")
+            
+            .mainContentContainer
+                .chatContainer
+                    .chatMessages
+                    .footer
+                        textarea.inputTextbox(name="messageInput", placeholder="Type a message...")
+                        button.sendMessageButton
+                            i.fas.fa-pen
+                        button.attachFile
+                            i.fas.fa-paperclip
+        +createChatNameModal(chat)
+
+block scripts
+    script(src="/js/chatPage.js")
+
+
+
+

@@ -1,3 +1,9 @@
+/// GLobals
+let cropper;
+let timer;
+let selectedUsers = []; 
+
+
 //common is commanly used scripts for all users
 // so here we can meet posts -> buttons -> passing data script to the main feed and etc..
 
@@ -80,15 +86,12 @@ $("#replyModal").on("show.bs.modal", (event) => {
 // bug fix with modal content appearence
 $("#replyModal").on("hidden.bs.modal", () => $("#originalPostContainer").html(""));
 
-
 // Deleting own post.
-
 $("#deletePostModal").on("show.bs.modal", (event) => {
     let button = $(event.relatedTarget);
     let postId = getPostIdFromElement(button);
     $("#deletePostButton").data("id", postId);
 });
-
 $("#deletePostButton").click((event) => {
     let postId = $(event.target).data("id");
 
@@ -107,7 +110,206 @@ $("#deletePostButton").click((event) => {
     })
 })
 
+// when click we take the postId so we can play with it
+$("#confirmPinModal").on("show.bs.modal", (event) => {
+    let button = $(event.relatedTarget);
+    let postId = getPostIdFromElement(button);
+    $("#pinPostButton").data("id", postId);
+})
 
+$("#unpinModal").on("show.bs.modal", (event) => {
+    let button = $(event.relatedTarget);
+    let postId = getPostIdFromElement(button);
+    $("#unpinPostButton").data("id", postId);
+})
+
+$("#pinPostButton").click((event) => {
+    let postId = $(event.target).data("id");
+
+    $.ajax({
+        url: `/api/posts/${postId}`,
+        type: "PUT",
+        data: {pinned: true},
+        success: (data, status, xhr) => {
+
+            // 204 no content 
+            if(xhr.status != 204) {
+                alert("could not pin post");
+                return;
+            }
+            location.reload();
+        }
+    })
+})
+
+$("#unpinPostButton").click((event) => {
+    let postId = $(event.target).data("id");
+
+    $.ajax({
+        url: `/api/posts/${postId}`,
+        type: "PUT",
+        data: { pinned: false },
+        success: (data, status, xhr) => {
+
+            if(xhr.status != 204) {
+                alert("could not delete post");
+                return;
+            }
+            
+            location.reload();
+        }
+    })
+})
+
+$("#filePhoto").change(function(){    
+    if(this.files && this.files[0]) {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+            let image = document.getElementById("imagePreview");
+            image.src = e.target.result;
+
+            if(cropper !== undefined) {
+                cropper.destroy();
+            }
+
+            cropper = new Cropper(image, {
+                aspectRatio: 1 / 1,
+                background: false
+            });
+
+        }
+        reader.readAsDataURL(this.files[0]);
+    }
+    // else {
+    //     console.log("nope")
+    // }
+})
+
+$("#coverPhoto").change(function(){    
+    if(this.files && this.files[0]) {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+            let image = document.getElementById("coverPreview");
+            image.src = e.target.result;
+
+            if(cropper !== undefined) {
+                cropper.destroy();
+            }
+
+            cropper = new Cropper(image, {
+                aspectRatio: 16 / 9,
+                background: false
+            });
+
+        }
+        reader.readAsDataURL(this.files[0]);
+    }
+})
+
+
+$("#imageUploadButton").click(() => {
+    let canvas = cropper.getCroppedCanvas();
+
+    if(canvas == null) {
+        alert("Could not upload image. Make sure it is an image file.");
+        return;
+    }
+
+    canvas.toBlob((blob) => {
+        let formData = new FormData();
+        formData.append("croppedImage", blob);
+
+        $.ajax({
+            url: "/api/users/profilePicture",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: () => location.reload()
+        })
+    })
+})
+
+$("#coverPhotoButton").click(() => {
+    let canvas = cropper.getCroppedCanvas();
+
+    if(canvas == null) {
+        alert("Could not upload image. Make sure it is an image file.");
+        return;
+    }
+
+    canvas.toBlob((blob) => {
+        let formData = new FormData();
+        formData.append("croppedImage", blob);
+
+        $.ajax({
+            url: "/api/users/coverPhoto",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: () => location.reload()
+        })
+    })
+})
+
+function removeUser() {
+    selectedUsers.pop();
+    updateSelectedUsersHtml();
+    // search is without result deleted text and notification will disapear
+    $(".resultsContainer").html("");
+}
+
+
+
+// Searching users in new-message container 
+$("#userSearchTextbox").keydown((event) => {
+    clearTimeout(timer);
+    let textbox = $(event.target);
+    let value = textbox.val();
+
+    // 'event keyCode = 8' is backspace for deleting names from searching bar
+    if (value == "" && event.keyCode == 8) {
+        // if user not chosed
+        // remove user from selection
+        selectedUsers.pop();
+        updateSelectedUsersHtml();
+        // search is without result deleted text and notification will disapear
+        $(".resultsContainer").html("");
+
+        if(selectedUsers.length == 0) {
+            $("#createChatButton").prop("disabled", true);
+            $("#deletePickedUser").prop("disabled", true);
+        }
+
+        return;
+    }
+
+    timer = setTimeout(() => {
+        value = textbox.val().trim();
+
+        if(value == "") {
+            $(".resultsContainer").html("");
+        }
+        else {
+            searchUsers(value);
+        }
+    }, 1000)
+
+})
+
+// Creating chat-appointment button 
+$("#createChatButton").click(() => {
+    let data = JSON.stringify(selectedUsers);
+
+    $.post("/api/chats", { users: data }, chat => {
+
+        // checking if the valid chat eist
+        if(!chat || !chat._id) return alert("Invalid response from server.");
+
+        window.location.href = `/messages/${chat._id}`;
+    })
+})
 
 //Likes
 $(document).on("click", ".likeButton", (event) => {
@@ -135,7 +337,7 @@ $(document).on("click", ".likeButton", (event) => {
    })
 })
 
-//Retweets
+//Reposts 
 $(document).on("click", ".retweetButton", (event) => {
    let button = $(event.target);
    let postId = getPostIdFromElement(button);
@@ -163,7 +365,6 @@ $(document).on("click", ".retweetButton", (event) => {
 
 })
 
-
 //replying on post
 $(document).on("click", ".post", (event) => {
    let element = $(event.target);
@@ -174,8 +375,6 @@ $(document).on("click", ".post", (event) => {
        window.location.href = '/posts/' + postId;
    }
 });
-
-
 
 $(document).on("click", ".followButton", (e) => {
     let button = $(e.target);
@@ -197,11 +396,11 @@ $(document).on("click", ".followButton", (e) => {
             let difference = 1;
             if(data.following && data.following.includes(userId)) {
                 button.addClass("following");
-                button.text("In Favourites");
+                button.text("");
             }
             else {
                 button.removeClass("following");
-                button.text("Add Favourite");
+                button.text("");
                 difference = -1;
             }
             
@@ -217,8 +416,6 @@ $(document).on("click", ".followButton", (e) => {
         }
     })
 });
-
-
 
 // solving like situation here
 function getPostIdFromElement(element) {
@@ -283,8 +480,23 @@ function createPostHtml(postData, largeFont = false) {
    }
 
    let buttons = "";
+   let pinnedPostText = "";
    if (postData.postedBy._id == userLoggedIn._id) {
-       buttons = `<button data-id="${postData._id}" data-toggle="modal" data-target="#deletePostModal"><i class='fas fa-times'></i></button>`;
+       
+    let pinnedClass = "";
+    let dataTarget = "#confirmPinModal";
+    if (postData.pinned === true) {
+        pinnedClass = "active";
+        dataTarget = "#unpinModal";
+        pinnedPostText = "<i class='fas fa-map-pin'></i> <span>Pinned post</span>";
+    }
+
+    
+    buttons = `
+
+       <button class='pinButton ${pinnedClass}'data-id="${postData._id}" data-toggle="modal" data-target="${dataTarget}"><i class='fas fa-map-pin'></i></button>
+
+       <button data-id="${postData._id}" data-toggle="modal" data-target="#deletePostModal"><i class='fas fa-times'></i></button>`;
    }
 
 
@@ -294,10 +506,11 @@ function createPostHtml(postData, largeFont = false) {
                </div>
                <div class='mainContentContainer'>
                    <div class='userImageContainer'>
-                       <img src='${postedBy.profilePic}'>
+                       <img class="userImageSearch" src='${postedBy.profilePic}'>
                    </div>
                    <div class='postContentContainer'>
-                       <div class='header'>
+                   <div class='pinnedPostText'>${pinnedPostText}</div>
+                   <div class='header'>
                            <a href='/profile/${postedBy.username}' class='displayName'>${displayName}</a>
                            <span class='username'>@${postedBy.username}</span>
                            <span class='date'>${timestamp}</span>
@@ -402,4 +615,104 @@ function outputPostsWithReplies(results, container) {
        let html = createPostHtml(result)
        container.append(html);
    });
+}
+
+function outputUsers(results, container) {
+    container.html("");
+
+    results.forEach(result => {
+        let html = createUserHtml(result, true);
+        container.append(html);
+    });
+
+    if(results.length == 0) {
+        container.append("<span class='noResults'>No results found</span>")
+    }
+}
+
+function createUserHtml(userData, showFollowButton) {
+
+    let name = userData.firstName + " " + userData.lastName;
+    let isFollowing = userLoggedIn.following && userLoggedIn.following.includes(userData._id);
+    let text = isFollowing ? "" : "" 
+    let buttonClass = isFollowing ? "followButton fas fa-star yes" : "followButton fas fa-star no"
+
+    let followButton = "";
+    if (showFollowButton && userLoggedIn._id != userData._id) {
+        followButton = `<div class='followButtonContainer'>
+                            <button class='${buttonClass}' data-user='${userData._id}'>${text}</button>
+                        </div>`;
+    }
+
+    return `<div class='user'>
+                <div class='userImageContainer'>
+                    <img  class="userImageSearch" src='${userData.profilePic}'>
+                </div>
+                <div class='userDetailsContainer'>
+                    <div class='header'>
+                        <a href='/profile/${userData.username}'>${name}</a>
+                        <span class='username'>@${userData.username}</span>
+                    </div>
+                </div>
+                ${followButton}
+            </div>`;
+}
+
+function searchUsers(searchTerm) {
+    $.get("/api/users", { search: searchTerm }, results => {
+        outputSelectableUsers(results, $(".resultsContainer"));
+    })
+}
+
+// to output selected user and not show them in the drop list
+function outputSelectableUsers(results, container) {
+    container.html("");
+
+    results.forEach(result => {
+        
+        if(result._id == userLoggedIn._id || selectedUsers.some
+        // checking for condition in array
+            (u => u._id == result._id)) {
+            return;
+        }
+
+        let html = createUserHtml(result, false);
+        let element = $(html);
+        element.click(() => userSelected(result))
+
+        container.append(element);
+    });
+
+    if(results.length == 0) {
+        container.append("<span class='noResults'>No results found</span>")
+    }
+}
+
+function userSelected(user) {
+    selectedUsers.push(user);
+    updateSelectedUsersHtml()
+    $("#userSearchTextbox").val("").focus();
+    $(".resultsContainer").html("");
+    $("#deletePickedUser").prop("disabled", false);
+    $("#createChatButton").prop("disabled", false);
+    
+}
+
+function updateSelectedUsersHtml() {
+    let elements = [];
+
+    // presenting in 'search user box' all selected users and showing their naming 
+    selectedUsers.forEach(user => {
+        
+        let name = user.firstName + " " + user.lastName + "<button onclick='removeUser()' class='deletePickedUser'> <i class='deletePickedUser fa fa-times'> </i> </button> ";
+
+        let userElement = $(`<span class='selectedUser'>${name}</span>`);
+        // pushing in array all new users 
+        elements.push(userElement);
+    })
+
+    // eremoving all selected users from the list
+    $(".selectedUser").remove(); 
+    // selector add users before the text box  with 'prepend'
+    $("#selectedUsers").prepend(elements);
 }

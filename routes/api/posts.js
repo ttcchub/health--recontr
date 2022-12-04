@@ -27,29 +27,40 @@ router.get("/", async (req, res, next) => {
         // console.log(searchObj) 
         // cehck of the replies 
     }
-    //procceding only posts of peeople whom we following only
-    if(searchObj.followingOnly !== undefined) {
-        let followingOnly = searchObj.followingOnly == "true";
 
-            if(followingOnly) {
-                var objectIds = [];
+    //  
+    if(searchObj.search !== undefined) {
+        //  regex - regular expression searching for string & rules
+        //  value - searchObj.search
+        // 'i' - is sensetive search in case of low or upper case
+        searchObj.content = { $regex: searchObj.search, $options: "i" };
+        delete searchObj.search;
+    }
+
+    //procceding only posts of people whom we following only
+    if(searchObj.followingOnly !== undefined) {
+        var followingOnly = searchObj.followingOnly == "true";
+
+        if(followingOnly) {
+            var objectIds = [];
             
-                if(!req.session.user.following) {
-                    req.session.user.following = [];
-                }
-    
-                req.session.user.following.forEach(user => {
-                    objectIds.push(user);
-                })
-    
-                objectIds.push(req.session.user._id);
-                searchObj.postedBy = { $in: objectIds };
+            if(!req.session.user.following) {
+                req.session.user.following = [];
             }
-            delete searchObj.followingOnly;
+
+            req.session.user.following.forEach(user => {
+                objectIds.push(user);
+            })
+
+            objectIds.push(req.session.user._id);
+            searchObj.postedBy = { $in: objectIds };
         }
         
-        let results = await getPosts(searchObj);
-        res.status(200).send(results);
+        delete searchObj.followingOnly;
+    }
+
+    var results = await getPosts(searchObj);
+    res.status(200).send(results);
 })
    // ================================================ \\
    //   findOme - find & return only one item/element
@@ -206,6 +217,24 @@ router.post("/:id/retweet", async (req, res, next) => {
 router.delete("/:id", (req, res, next) => {
     Post.findByIdAndDelete(req.params.id) 
     .then(result => res.sendStatus(202))
+    .catch(error => {
+        console.log(error);
+        res.sendStatus(400);
+    })
+})
+
+router.put("/:id", async (req, res, next) => {
+
+    if(req.body.pinned !== undefined) {
+        await Post.updateMany({postedBy: req.session.user }, { pinned: false })
+        .catch(error => {
+            console.log(error);
+            res.sendStatus(400);
+        })
+    }
+
+    Post.findByIdAndUpdate(req.params.id, req.body) 
+    .then(result => res.sendStatus(204))
     .catch(error => {
         console.log(error);
         res.sendStatus(400);
