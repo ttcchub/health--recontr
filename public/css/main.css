@@ -3,22 +3,26 @@
     --greyLight:  #cdcdcd;
     --buttonHoverBg: #f2f2f2db;
     --lightGrey:rgb(209, 209, 209);
+    --lightGrey2:rgb(233, 233, 233);
     --spacing: 15px;
     --greyText: rgb(101, 119, 134);
     --greyButtonText: rgba(0,0,0,0.34);
     --neon: #24fd70;
     --neon_2: #00a239;
     --red: rgb(226,34,94);
+    --redBack: rgb(238, 112, 152);
     --blue: rgb(11, 76, 181);
     --whiteBorder: rgb(255, 255, 255);
     --redBackground: rgb(255, 143, 178);
     --pink: rgb(255, 208, 223);
     --green: #10c851;
     --greenBackground: rgb(148, 255, 196);
-    --orange:  rgb(255, 61, 2);
-    --orangeBackground:  #ffe7c3 ;
+    --orange:  rgba(255, 94, 45, 0.995);
+    --orange2:  rgba(239, 24, 0, 0.995);
+    --orangeBackground:  #ffd8c3 ;
     --blueBackground:  rgb(218, 227, 255) ;
     --blueBackground2:  rgb(63, 111, 255) ;
+    --blueBackground3:  rgb(128, 160, 255) ;
 
 }
 
@@ -26,12 +30,20 @@
     outline: none !important;
 }
 
-nav {
+
+
+nav a{
     background-color: rgb(255, 255, 255);
     display: flex;
+    justify-content: left;
     flex-direction: column;
-    align-items: flex-end;
+    /* align-items: flex-end; */
     height: 100%;
+
+    scale: 90%;
+    transition: all .2s ease-in-out; 
+    color: var(--greyButtonT);
+    cursor: pointer;
 }
 
 a:hover{
@@ -40,12 +52,19 @@ a:hover{
 }
 
 .col-2{
-    padding-top: 50px;
-    padding-right: 80px;
+    padding-top: 100px;
+    padding-right: 150px;
+    padding-right: 110px;
 }
+
 .crossLogo{
-    scale: 250%;
-    padding-bottom: 10px;
+    scale: 150%;
+    margin-bottom: 80px;
+    margin-left: 30px;
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    
 }
 
 h1 {
@@ -59,11 +78,11 @@ h1 {
     margin-top: 8.5px;
     margin-right: 5px;
     padding: 3px;
-    scale: 120%;
     height: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    scale: 120%;
     transition: all .2s ease-in-out; 
     color: var(--greyLight);
 }
@@ -74,13 +93,12 @@ transform: scale(130%);
 
 
 nav a{
-    margin:  10px;
-    font-size:  30px;
-    width: 45px;
+    margin:10px;
+    font-size:  16px;
     height: 45px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: left;
+    justify-content: left;
 }
 
 
@@ -89,6 +107,7 @@ nav a{
     border-left: 1px solid var(--lightGrey);
     border-right: 1px solid var(--lightGrey);
     display: flex;
+    margin-left: 70px;
     flex-direction: column;
     justify-content: center;
 }
@@ -106,13 +125,16 @@ nav a{
     flex: 1;
 }
 
-nav a.blue{
-    color: var(--blue);
-}
+nav img{
+    color: var(--greyLight);
+    scale: 96%;
+    transition: all .2s ease-in-out; }
 
-nav a:hover{
-    background-color: var(--buttonHoverBg);
-    border-radius: 50%;
+nav img:hover{
+
+    transform: scale(87%); 
+    color: rgb(85, 85, 85);
+    cursor: pointer;
 }
 
 .postFromContainer {
@@ -286,10 +308,23 @@ button span {
 }
 
 
+.displayRating {
+    font-weight: bold;
+    margin-top: 23px;
+    margin-bottom: 23px;
+    margin-left: 523px;
+}
+
+.fa-caret-up{
+    margin-left: 5px;
+    color: rgb(83, 255, 83);
+    scale: 130%;
+}
+
 .displayName {
     font-weight: bold;
-
 }
+
 .displayName:hover {
     font-weight: bold;
     color: var(--blue);
@@ -407,35 +442,39 @@ button span {
     padding: var(--spacing);
 }
 
-.coverPhotoContainer {
+.coverPhotoSection {
     height: 180px;
-    width: 500px;
-    left: 62px;
+    /* width: 600px; */
+    left: 0px;
+    /* top: 30px; */
+    border-radius: 0px 0px 55px 55px;
     background-color: var(--blue);
     position: relative;
 }
+
+
 
 .profileHeaderContainer .userImageContainer {
     width: 102px;
     height: 102px;
     position: absolute;
-    top: 90px;
+    top: 65px;
     margin-left: var(--spacing);
     border: 4px solid var(--whiteBorder);
-    border-radius: 50%;
+    border-radius: 35%;
     background-color: rgb(255, 255, 255);
     justify-content: center;
     
+    display: flex;
+    align-items: center;
+    justify-content: center;
     
 }
 .profileIMG {
-    top: -17px;
-    left: -1px;
     position: absolute;
     justify-self: center;
     justify-content: center;
-    scale: 62%;
-
+    border-radius: 43%;
     justify-content: left;
     align-content: left;
     
@@ -451,24 +490,32 @@ button span {
 
 .profileButton,
 .followButton {
-    background-color: var(--blue);
-    color: whitesmoke;
+    /* background-color: var(--blue); */
+    color: rgb(208, 208, 208);
     font-weight: bold;
     padding: 5px 15px;
-    border-radius: 60px;
+    border-radius: 20px;
     display: inline-block;
     margin-left: var(--spacing);
 }
 
 .profileButton:hover,
 .followButton:hover {
-    background-color: var(--blueBackground2);
+    /* background-color: var(--blueBackground2); */
     transition: all .2s ease-in-out; 
 }
 
+.yes{
+    color: rgb(255, 205, 4);
+}
+.no{
+    color: rgb(201, 201, 201);
+}
+
 .followButton.following {
-    background-color: var(--blueBackground);
-    color: var(--blue);
+    /* background-color: var(--blueBackground); */
+    color: rgb(255, 205, 4);
+
 }
 
 .profileHeaderContainer .userDetailsContainer {
@@ -524,6 +571,7 @@ button span {
 /* we need it to reuse this raw style*/
 .wrapper > .row {
     margin: 0;
+;
 }
 
 .noResults {
@@ -533,26 +581,532 @@ button span {
 .resultsContainer {
     display: flex;
     flex-direction: column;
+    
 }
 
 .resultsContainer .user {
     padding: var(--spacing);
     display: flex;
+    border: 1.5px solid var(--whiteBorder);
+
+}
+
+
+.resultsContainerOpenedCases{
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.resultsContainerOpenedCases .user{
+    padding: var(--spacing);
+    display: flex;
     border-bottom: 1px solid var(--lightGrey);
 }
 
-.user .userDetailsContainer {
+
+
+
+
+
+.userDetailsContainer {
     flex: 1;
-    padding: 0 var(--spacing)
+    padding: 0 var(--spacing);
+    scale: 100%;
+
+    transition: all .2s ease-in-out; 
+    cursor: pointer;
+
 }
 
-.profilePictureButton {
+
+.user {
+    flex: 1;
+    padding: 0 var(--spacing);
+    scale: 100%;
+    transition: all .2s ease-in-out; 
+    cursor: pointer;
+    border: 1px solid var(--whiteBorder);
+    background-color: #f9f9f9;
+
+
+}
+
+.user:hover{
+    background-color: #b9ffd1;
+    transform: scale(99%); 
+    cursor: pointer;
+
+}
+
+
+
+.profilePictureButton, .coverPhotoButton {
     position: absolute;
-    font-size: 50px;
     color: rgba(0,0,0,0.6);
     display: none;
+
+    top: 37px;
+    left: 30px;
+    position: absolute;
+    justify-self: center;
+    justify-content: center;
+    scale: 262%; 
+
+    justify-content: left;
+    align-content: left;
+    
+}
+.userImageSearch{
+    border-radius: 50px;
+    scale: 125%;
+    left: 20px;
 }
 
-.userImageContainer:hover .profilePictureButton {
+.userImageContainer:hover .profilePictureButton .userImageSearch, 
+.coverPhotoSection:hover .coverPhotoButton .userImageSearch {
     display: block;
+    color: #ffffff;
+    border-radius: 50px;
+
 }
+
+.fa-duotone.fa-image{
+    scale: 60%;
+    margin-left: 180px;
+    margin-top: 25px;
+}
+.fas.fa-camera{
+    margin-left: 2px;
+    scale: 80%;
+
+}
+
+.backtext{
+    font-size: 4px;
+    margin-left: 180px;
+}
+
+.coverPhotoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.coverPhotoContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    border-radius: 0px 0px 55px 55px;
+}
+
+#imagePreview,
+#coverPreview{
+    width: 100%;
+    display: block;
+ 
+    /* This rule is very important, please don't ignore this */
+    max-width: 100%;
+}
+
+
+.pinButton{
+    color: var(--greyLight);
+}
+.pinButton:hover{
+    color: rgb(150, 150, 150);
+}
+
+.pinButton.active{
+    color: orange;
+}
+
+
+
+.pinnedPostText {
+    font-size: 12px;
+    color: var(--greyText);
+}
+
+.pinnedPostContainer {
+    border-bottom: 10px solid rgb(214, 220, 255);
+}
+
+.searchBarContainer {
+    cursor: pointer;
+    position: relative;
+    color: var(--black);
+    padding: 10px var(--spacing);
+}
+
+.searchBarContainer i {
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    left: 28px;
+}
+
+
+.searchBarContainer #searchBox {
+    cursor: pointer;
+    height: 36px;
+    width: 100%;
+    padding: 5px 15px 5px 40px;
+    border-radius: 50px;
+    background-color: var(--lightGrey2);
+    border: none;
+    color: var(--black);
+}
+
+.fas.fa-search{
+    scale: 110%;
+    transition: all .2s ease-in-out; 
+    color: var(--grey);
+    cursor: pointer;
+}
+
+.fas.fa-search:hover{
+    color: var(--greyLight);
+    transform: scale(80%); 
+    cursor: pointer;
+}
+
+
+
+.home{
+    margin-left: 12px;
+    align-items: center;
+    flex-direction: row;
+    cursor: pointer;
+}
+.search{
+    margin-left: 12px;
+    align-items: center;
+    flex-direction: row;
+    cursor: pointer;
+}
+.notifications{
+    margin-left: 12px;
+    align-items: center;
+    flex-direction: row;
+    cursor: pointer;
+}
+.messages{
+    margin-left: 12px;
+    align-items: center;
+    flex-direction: row;
+    cursor: pointer;
+}
+.profile{
+    margin-left: 12px;
+    align-items: center;
+    flex-direction: row;
+    cursor: pointer;
+}
+.logout{
+    margin-top: 32px;
+    margin-left: 32px;
+    margin-right: 32px;
+    align-items: center;
+    flex-direction: row;
+    cursor: pointer;
+}
+
+.nIcon {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    margin: 20px;
+}
+
+
+
+.nIconLogOut {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+}
+
+.nIconProfile {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    margin: 0px 30px 0px 20px;
+}
+
+
+.chatPageContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.chatTitleBar {
+    border-bottom: 1px solid var(--lightGrey);
+    display: flex;
+    align-items: center;
+    min-height: 60px;
+    padding: 10px;
+}
+
+.chatTitleBar label {
+    margin: 0 10px 0 0;
+}
+
+#userSearchTextbox {
+    border: none;
+    flex: 1;
+    font-weight: 200;
+    min-width: 350px;
+}
+
+#createChatButton {
+    border: none;
+    background-color: var(--neon);
+    color:  var(--black);
+    padding: 7px 20px;
+    margin: 10px auto;
+    border-radius: 40px;
+}
+
+#createChatButton:disabled {
+    background-color: var(--lightGrey);
+    color: var(--greyText);
+}
+
+.deletePickedUser {
+    color: #ff3714;
+    scale: 95%;
+    border-radius: 10px;
+    transition: all .2s ease-in-out; 
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 7px;
+}
+
+.deletePickedUser:hover {
+    transform: scale(83%); 
+}
+
+
+.selectedUser {
+    font-weight: 300;
+    background-color: var(--orangeBackground);
+    color: var(--orange);
+    padding: 6px 15px 6px 15px;
+    border-radius: 15px;
+    margin: 5px 5px 0 0;
+    display: inline-block;
+}
+
+
+.resultListItem {
+    width: 360px;
+    padding: 7px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    background-color: #f9f9f9;
+    border: 1px solid var(--whiteBorder);
+    flex: 1;
+    padding: 0 var(--spacing);
+    scale: 100%;
+    transition: all .2s ease-in-out; 
+    cursor: pointer;
+}
+
+.resultListItem:hover {
+    background-color: #b9ffd1;
+    transform: scale(99%); 
+    cursor: pointer;
+}
+
+.resultsDetailsContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.resultsDetailsContainer .heading {
+    font-weight: 500;
+}
+
+.resultsDetailsContainer .subText {
+    color: var(--greyText);
+    font-size: 14px;
+}
+
+.resultListItem img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+}
+
+.resultsImageContainer {
+    height: 40px;
+    width: 40px;
+    position: relative;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.groupChatImage img {
+    height: 65%;
+    width: 65%;
+    position: absolute;
+    bottom: 0;
+    margin: 0;
+    border: 2px solid #fff;
+}
+
+.groupChatImage img:first-of-type {
+    top: 0;
+    right: 0;
+}
+
+/* getting etc.. ' ....  ' adding to long mwssage boxes and content */
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.chatTitleBarContainer {
+    border-bottom: 1px solid var(--lightGrey);
+    display: flex;
+    align-items: center;
+    padding: var(--spacing);
+}
+
+#chatName {
+    width: 100%;
+    border: 1px solid transparent;
+    padding: 0 5px;
+}
+
+#chatName:hover {
+    border: 1px solid var(--lightGrey);
+    cursor: text;
+}
+
+.chatContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+.chatContainer .footer {
+    display: flex;
+    padding: var(--spacing);
+    flex-shrink: 0px;
+}
+
+.chatContainer .footer textarea {
+    flex: 1;
+    resize: none;
+    background-color: rgba(0,0,0,0.05);
+    border-radius: 18px;
+    border: none;
+    padding: 20px 28px;
+    height: 68px;
+    transition: all .2s ease-in-out; 
+
+}
+.chatContainer .footer textarea:hover {
+    flex: 1;
+    resize: none;
+    background-color: rgba(0,0,0,0.05);
+    border-radius: 26px;
+    border: none;
+    padding: 20px 28px;
+    height: 68px;
+}
+
+
+.chatContainer .footer button {
+    background-color: transparent;
+    color: var(--redBack);
+    font-size: 24px;
+    padding-left: 20px;
+}
+
+.chatContainer .footer button:hover {
+    background-color: transparent;
+    color: var(--red);
+    font-size: 24px;
+
+}
+
+.chatMessages {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: var(--spacing);
+}
+
+.chatImagesContainer {
+    display: flex;
+    flex-direction: row-reverse;
+    height: 100%;
+    margin-right: 10px;
+}
+
+.chatImagesContainer img {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+}
+
+.chatImagesContainer .userCount {
+    height: 40px;
+    width: 40px;
+    background-color: #f1f1f1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border: 2px solid #fff;
+}
+
+.chatImagesContainer img:not(:last-child),
+.chatImagesContainer .userCount {
+    margin-left: -10px;
+}
+
+#chatNameTextbox {
+    width: 100%;
+}
+
+
+.sendMessageButton{
+    scale: 100%;
+    transition: all .2s ease-in-out; 
+    cursor: pointer;
+}
+.sendMessageButton:hover{
+    transform: scale(80%); 
+    cursor: pointer;
+}
+
+
+.attachFile{
+    scale: 100%;
+    transition: all .2s ease-in-out; 
+    cursor: pointer;
+}
+.attachFile:hover{
+    transform: scale(80%); 
+    cursor: pointer;
+}
+
+
+

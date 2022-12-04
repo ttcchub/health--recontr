@@ -13,9 +13,14 @@ $(document).ready(() => {
 // loading posts of exact user 
 function loadPosts() {
     // to have access to userId adn posts of it
+    $.get("/api/posts", { postedBy: profileUserId, pinned: true }, results => {
+        outputPinnedPost(results, $(".pinnedPostContainer"));
+    })
+
+
     $.get("/api/posts", { postedBy: profileUserId, isReply: false }, results => {
         outputPosts(results, $(".postsContainer"));
-    })
+    }) 
 }
 
 function loadReplies() {
@@ -23,4 +28,21 @@ function loadReplies() {
     $.get("/api/posts", { postedBy: profileUserId, isReply: true }, results => {
         outputPosts(results, $(".postsContainer"));
     })
+}
+
+
+function outputPinnedPost(results, container) {
+    //hiding pinned post container if there is no pins
+    if(results.length == 0) {
+        container.hide();
+        return;
+    }
+
+    container.html("");
+
+    // can handle more than one pinned post 
+    results.forEach(result => {
+        let html = createPostHtml(result)
+        container.append(html);
+    });
 }

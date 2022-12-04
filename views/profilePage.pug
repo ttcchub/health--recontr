@@ -14,18 +14,36 @@ block content
         //-  here we are using pug variable not JS
 
         //- js countinf all followers
+      
         - followersCount = profileUser.followers.length
         - followingCount = profileUser.following.length
 
         .profileHeaderContainer
-            .coverPhotoContainer
-            .userImageContainer
-                img(src=profileUser.profilePic, class="profileIMG", alt="User profile image")
-            
+            .coverPhotoSection 
+                .coverPhotoContainer
+                    if profileUser.coverPhoto 
+                        img(src=profileUser.coverPhoto, alt="Users cover photo" class="")
+
+                    if profileUser._id == userLoggedIn._id
+                        button.coverPhotoButton(data-toggle="modal", data-target="#coverPhotoUploadModal")
+                            div
+                                i.fas.fa-duotone.fa-image
+                                h5.backtext Background cover
+
+
+                .userImageContainer
+                    .profileIMG
+                    img(src=profileUser.profilePic, class="profileIMG", alt="User profile image")
+
+                    if profileUser._id == userLoggedIn._id
+                        button.profilePictureButton(data-toggle="modal", data-target="#imageUploadModal")
+                                i.fas.fa-camera
+
             .profileButtonsContainer
                 if profileUser._id != userLoggedIn._id
                     a.profileButton(href=`/messages/${profileUser._id}`)
-                        i.fas.fa-envelope
+                        i.fa.fa-calendar
+                        
 
                     //- be suring taht it actually following , is profile Id exesists in array,.
                     //- since its part of html(pug code)
@@ -37,36 +55,66 @@ block content
                         //-  plus sign we add when we calling mixin
                     - else
                         +createFollowButton(profileUser, false)
+                            
             //- displaying info about user
             .userDetailsContainer
-                span.displayName #{profileUser.firstName} #{profileUser.lastName}
-                span.username @#{profileUser.username}
-                span.description #{profileUser.description}
+                if (profileUser.role === 'ADMIN' )
+                    span.displayName #{profileUser.firstName} #{profileUser.lastName}
+                    span.username @#{profileUser.username}
 
-                .followersContainer
-                    //- linked with  the followersCount and followingCount  
+                    div.displayRating
+                        span#followersValue.value <b> #{followersCount} </b>
+                            i.fas.fa-solid.fa-caret-up
+                        <br>
+                        span Rating
 
-  
-                    a(href=`/profile/${profileUser.username}/following`)
-                        span.value #{followingCount}
-                        span Following
-                    a(href=`/profile/${profileUser.username}/followers`)
-                        span#followersValue.value #{followersCount}
-                        span Followers
+                    span.description #{profileUser.description}
 
-                    //- - if (user.role === 'ADMIN')
+                    .followersContainer
+                        //- linked with  the followersCount and followingCount  
 
+    
+                        //- a(href=`/profile/${profileUser.username}/following`)
+                        a()
+                            span.value #{followingCount}
+                            span Employees
+                        //- a(href=`/profile/${profileUser.username}/followers`)
+
+                        a()
+                            span#followersValue.value #{followersCount}
+                            span Services
+
+                        //- - if (user.role === 'ADMIN')
+                else
 
         //- here we calling function 'mixin createTab' with posts & replies
-        .tabsContainer
-            +createTab("News", `/profile/${profileUser.username}`, selectedTab != "replies")
-            +createTab("Messages", `/profile/${profileUser.username}/replies`, selectedTab == "replies")
-            +createTab("Appointment", `/profile/${profileUser.username}/appointments`, selectedTab == "appointments")
+        - if (profileUser.role === 'CLIENT')
+            .tabsContainer
+             +createTab("Appointment", `/profile/${profileUser.username}/appointments`, selectedTab == "appointments")
+            
+
+        - if (profileUser.role ==='MODERATOR' || profileUser.role !='CLIENT' )
+            .tabsContainer
+                +createTab("Assignments", `/profile/${profileUser.username}`, selectedTab != "replies"  )
+                +createTab("Messages", `/profile/${profileUser.username}/replies`, selectedTab == "replies")
+
+        - if (profileUser.role === 'ADMIN')
+            .tabsContainer 
+                +createTab("News", `/profile/${profileUser.username}`, selectedTab != "replies" )
+                +createTab("Messages", `/profile/${profileUser.username}/replies`, selectedTab == "replies")
+                +createTab("Appointment", `/profile/${profileUser.username}/appointments`, selectedTab == "appointments")    
+        
 
         //- posts Container for showing post of exact user on his profile Page
+        
+        .pinnedPostContainer
         .postsContainer
 
+
         +createPostModals(userLoggedIn)
+        +createImageUploadModal()
+        +createCoverPhotoUploadModal()
+
 
 block scripts
     script(src="/js/profile.js")

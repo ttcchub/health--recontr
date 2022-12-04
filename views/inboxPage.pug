@@ -1,0 +1,11 @@
+extends layouts/main-layout.pug
+
+block content    
+    .resultsContainerOpenedCases.ellipsis.col-lg-20
+
+block headerButton
+    a(href="/messages/new")
+        i.fa.fa-calendar-plus-o
+
+block scripts
+    script(src="/js/inboxPage.js")
