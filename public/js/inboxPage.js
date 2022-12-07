@@ -4,16 +4,18 @@ $(document).ready(() => {
             alert("Could not get chat list.");
         }
         else {
-            
-            outputChatList(data, $(".resultsContainerOpenedCases.ellipsis.col-lg-20"));
+            outputChatList(data, $(".resultsContainer"));
+            // outputChatList(data, $(".resultsContainerOpenedCases.ellipsis.col-lg-20"));
         }
     })
 })
 
+// outputChatList(data, $(".resultsContainerOpenedCases.ellipsis.col-lg-20"));
+
 // defining chat list with users
 function outputChatList(chatList, container) {
     chatList.forEach(chat => {
-        let html = createChatHtml(chat);
+        var html = createChatHtml(chat);
         container.append(html);
     })
 
@@ -21,14 +23,12 @@ function outputChatList(chatList, container) {
         container.append("<span class='noResults'>Nothing to show.</span>");
     }
 }
-
-
 // ellipsis  -  is handling the border of content box, if to many users added it will leave ... withoung exiting the border
 
 function createChatHtml(chatData) {
     let chatName = getChatName(chatData);
     let image = getChatImageElements(chatData);
-    let latestMessage = "This is the latest message";
+    let latestMessage = getLatestMessage(chatData.latestMessage);
     
     return `<a href='/messages/${chatData._id}' class='resultListItem'>
                 ${image}
@@ -38,6 +38,17 @@ function createChatHtml(chatData) {
                 </div>
             </a>`;
 }
+
+
+function getLatestMessage(latestMessage) {
+    if(latestMessage != null) {
+        var sender = latestMessage.sender;
+        return `${sender.firstName} ${sender.lastName}: ${latestMessage.content}`;
+    }
+
+    return "New chat";
+}
+
 
 //taking the chat data as parameter
 function getChatName(chatData) {

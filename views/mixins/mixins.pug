@@ -149,9 +149,9 @@ mixin createChatImage(chatData, userLoggedIn)
         return
 
     - var i = 0
-    - var maxImagesToShow = 3c 
+    - var maxImagesToShow = 3
     - var remainingUsers = chatData.users.length - maxImagesToShow
-    - remainingUsers-- //  Remove 1 since we won't show our own image
+    - remainingUsers-- // Remove 1 since we won't show our own image
     
     .chatImagesContainer
         if remainingUsers > 0
@@ -167,13 +167,12 @@ mixin createChatImage(chatData, userLoggedIn)
             img(src=user.profilePic, alt="User's profile picture", title=user.firstName)
             - i++
 
-
 mixin createChatNameModal(chat)
     #chatNameModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='chatNameModalLabel', aria-hidden='true')
         .modal-dialog(role='document')
             .modal-content
                 .modal-header
-                    h5#chatNameModalLabel.modal-title Describe the issue
+                    h5#chatNameModalLabel.modal-title Change the chat name
                     button.close(type='button', data-dismiss='modal', aria-label='Close')
                     span(aria-hidden='true') &times;
                 .modal-body

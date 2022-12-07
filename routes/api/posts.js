@@ -6,6 +6,8 @@ const bodyParser = require("body-parser")
 // because extra folder deep we need scheme of page
 const User = require('../../schemas/UserSchema');
 const Post = require('../../schemas/PostSchema');
+const Notification = require('../../schemas/NotificationSchema');
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -130,6 +132,12 @@ router.post("/", async (req, res, next) => {
     Post.create(postData)
     .then(async newPost => {
         newPost = await User.populate(newPost, { path: "postedBy" })
+        newPost = await Post.populate(newPost, { path: "replyTo" })
+
+        // Modified later cuz of mismatch of source code
+        if(newPost.replyTo !== undefined) {
+            await Notification.insertNotification(newPost.replyTo.postedBy, req.session.user._id, "reply", newPost._id);
+        }
         
         // http status  201 - created
         res.status(201).send(newPost);
@@ -167,6 +175,10 @@ router.put("/:id/like", async (req, res, next) => {
         console.log(error);
         res.sendStatus(400);
     })
+
+    if(!isLiked) {
+        await Notification.insertNotification(post.postedBy, userId, "postLike", post._id);
+    }
 
     // 200 - success html request 
     res.status(200).send(post)
@@ -209,8 +221,10 @@ router.post("/:id/retweet", async (req, res, next) => {
         res.sendStatus(400);
     })
 
-
-
+    if(!deletedPost) {
+        await Notification.insertNotification(post.postedBy, userId, "retweet", post._id);
+    }
+    
     res.status(200).send(post)
 })
 
@@ -240,6 +254,8 @@ router.put("/:id", async (req, res, next) => {
         res.sendStatus(400);
     })
 })
+
+
 
 // refactoring / which is allows to reuse code in multiple places 
 async function getPosts (filter) {
