@@ -9,7 +9,7 @@ const Chat = require('../schemas/ChatSchema');
 
 router.get("/", (req, res, next) => {
     res.status(200).render("inboxPage", {
-        pageTitle: "Appointments Queue",
+        pageTitle: "Inbox",
         userLoggedIn: req.session.user,
         userLoggedInJs: JSON.stringify(req.session.user)
     });
@@ -17,7 +17,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/new", (req, res, next) => {
     res.status(200).render("newMessage", {
-        pageTitle: "New Appointment",
+        pageTitle: "New message",
         userLoggedIn: req.session.user,
         userLoggedInJs: JSON.stringify(req.session.user)
     });
@@ -25,12 +25,13 @@ router.get("/new", (req, res, next) => {
 
 router.get("/:chatId", async (req, res, next) => {
 
-    let userId = req.session.user._id;
-    let chatId = req.params.chatId;
-    let isValidId = mongoose.isValidObjectId(chatId);
+    var userId = req.session.user._id;
+    var chatId = req.params.chatId;
+    var isValidId = mongoose.isValidObjectId(chatId);
 
-    let payload = {
-        pageTitle: "Appointment",
+
+    var payload = {
+        pageTitle: "Chat",
         userLoggedIn: req.session.user,
         userLoggedInJs: JSON.stringify(req.session.user)
     };
@@ -40,19 +41,18 @@ router.get("/:chatId", async (req, res, next) => {
         return res.status(200).render("chatPage", payload);
     }
 
-    // checking is this chat even exists 
-    let chat = await Chat.findOne({ _id: chatId, users: { $elemMatch: { $eq: userId } } })
+    var chat = await Chat.findOne({ _id: chatId, users: { $elemMatch: { $eq: userId } } })
     .populate("users");
 
     if(chat == null) {
         // Check if chat id is really user id
-        let userFound = await User.findById(chatId);
+        var userFound = await User.findById(chatId);
 
         if(userFound != null) {
             // get chat using user id
             chat = await getChatByUserId(userFound._id, userId);
         }
-    } 
+    }
 
     if(chat == null) {
         payload.errorMessage = "Chat does not exist or you do not have permission to view it.";
@@ -60,7 +60,7 @@ router.get("/:chatId", async (req, res, next) => {
     else {
         payload.chat = chat;
     }
-
+    // checking is this chat even exists 
     res.status(200).render("chatPage", payload);
 })
 
@@ -80,13 +80,14 @@ function getChatByUserId(userLoggedInId, otherUserId) {
     },
     {
         $setOnInsert: {
-            users: [userLoggedInId, otherUserId] 
+            users: [userLoggedInId, otherUserId]
         }
     },
-    // options of newly updated 
+        // options of newly updated 
     {
         new: true,
-        // upsert - 'if you didnt find - create it' straign explanaition of function
+                // upsert - 'if you didnt find - create it' straign explanaition of function
+
         upsert: true
     })
     .populate("users");

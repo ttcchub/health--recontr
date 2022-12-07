@@ -1,6 +1,5 @@
 extends layouts/main-layout.pug
 
-
 block content   
     
     if errorMessage
@@ -12,23 +11,30 @@ block content
         .chatPageContainer
             .chatTitleBarContainer
                 +createChatImage(chat, userLoggedIn)
-                //-  data-togal - oppening modal , data-targer - how we open modal
-                span#chatName(data-toggle="modal", data-target="#chatNameModal")
+                span#chatName(data-toggle="modal", data-target="#chatNameModal" class='chatName')
             
             .mainContentContainer
-                .chatContainer
-                    .chatMessages
+                .loadingSpinnerContainer
+                    img(src="/images/loadingSpinner.gif", alt="Loading spinner")
+                .chatContainer(style="visibility: hidden")
+                    ul.chatMessages
+
+                    .typingDots
+                        img(src="/images/dots.gif", alt="Typing dots") 
+
+
+                    
                     .footer
-                        textarea.inputTextbox(name="messageInput", placeholder="Type a message...")
-                        button.sendMessageButton
-                            i.fas.fa-pen
                         button.attachFile
                             i.fas.fa-paperclip
+                        textarea.inputTextbox(name="messageInput", placeholder="Type a message...")
+                        
+                        button.sendMessageButton
+                            i.fas.fa-pen
         +createChatNameModal(chat)
 
 block scripts
     script(src="/js/chatPage.js")
-
 
 
 
