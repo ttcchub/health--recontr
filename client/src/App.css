@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Roboto:ital,wght@0,100;1,700;1,900&family=Signika+Negative:wght@300;400;600;700&display=swap");
+
+* {
+  /* font-family: Clarkson, Helvetica, sans-serif; */
+  /* font-family: "Dancing Script", cursive; */
+  /* font-family: "Roboto", sans-serif; */
+  font-family: "Signika Negative", sans-serif;
+}
+
+/* CSS */
+button {
+  cursor: pointer;
+  transition: all 100ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+button:disabled {
+  pointer-events: none;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+button:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+a.active {
+  background-color: rgba(59, 200, 147, 0.37);
+}

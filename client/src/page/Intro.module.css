@@ -1,0 +1,147 @@
+.intro {
+    width: 100vw;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    background-image: url('https://cdn.pixabay.com/photo/2018/03/27/03/53/doctor-3264979_1280.jpg');
+    /* background-image: url('https://cdn.pixabay.com/photo/2017/02/20/14/18/health-2082630_1280.jpg'); */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgb(127, 164, 127);
+}
+
+
+.intro header{
+    border:none;
+    min-height: 35vh;
+    width: 100vw;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row;
+    text-align: center;
+}
+
+.intro header h2{
+    text-align: center;
+    text-transform:uppercase;
+    font-size: 35px;
+    margin-top: 50px;
+    font-weight: bolder;
+    color: white;
+    /* color: rgb(22,101,52); */
+    position: absolute;
+    top: 200px;
+    text-shadow: 1px 1px 2px black;
+    
+}
+
+.intro header form{
+    background: rgba(175, 230, 206, .8);
+    min-width: 70%;
+    margin-top: 60px;
+    padding: 12px 20px;
+    display: block;
+    box-shadow:  4px 8px 0 rgba(22, 101, 52, 0.2), 0 6px 20px 0 rgba(22, 101, 52, 0.19);
+    border-radius: 5px;
+
+}
+
+ .intro header form div{
+    display: block;
+    float: left;
+    width: 40%;
+    box-sizing: border-box;
+    height: 50px;
+    position: relative;
+    padding: 0 5px;
+} 
+
+.intro header form input{
+    /* float: left; */
+    width: 100%;
+    height: 50px;
+    border: none;
+    padding-left: 10px;
+    border-radius: 5px;
+    text-align: left;
+    color: black;
+}
+
+.intro header form button{
+    background-color: rgb(21, 128, 61);
+    color: white;
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: 5px;
+    height: 50px;
+    width: 15%;
+}
+
+.intro header form button:hover{
+    background-color: rgb(26,94,32);
+}
+
+.intro main{
+    display: flex;
+    flex-flow: column wrap;
+    color:#1A5E20;
+}
+
+.intro main section{
+    flex: 2;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    flex-flow: row;
+    gap: 100px;
+    width: 100vw;
+    padding: 10px;   
+}
+
+.intro main article{
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row;
+    gap: 10px;
+    padding: 1rem;
+    margin-left: 100px;
+    margin-top: 150px;
+   
+}
+
+.intro main article p{
+    width: 200px;
+    height: 80px;
+    text-align: center;
+    font-weight: bolder;
+    font-size: 15pt;
+    color: white;
+  text-shadow: 1px 1px 2px black, 0 0 10px blue, 0 0 2px darkblue;
+}
+
+
+.intro main article h2{
+    font-weight: bolder;
+    font-size: 25px;
+    color: rgb(5, 75, 238)
+}
+
+.intro footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: rgba(12, 148, 136, 1);
+     color: white;
+     text-align: center;
+     height: 5vh;
+     display: flex;
+     justify-content: space-around;
+     align-items: center;
+     flex-flow: row;
+
+}
